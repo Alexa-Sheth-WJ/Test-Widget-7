@@ -1,0 +1,59 @@
+{
+  "customer": "Kohl's",
+  "widgetType": "Custom (Countdown)",
+  "title": "Earn more this holiday",
+  "branding": {
+    "primaryLogo": "logo.png (actually JPEG; converted to transparent PNG, 288x48, embedded as image/png base64). Recoloured white in dark mode via CSS filter.",
+    "secondaryLogo": null,
+    "primaryColor": "#800031",
+    "secondaryColor": "#2B2E33",
+    "surfaceColor": { "light": "#F3EBE2", "dark": "#221C1E" },
+    "accentColors": { "ok": "#F0A81C", "warn": "#800031", "bad": "#8C8487" }
+  },
+  "content": {
+    "primaryMetric": {
+      "label": "Bonus pay starts in / Bonus pay ends in",
+      "fallback": "Countdown (days, hours, min, sec) to startAt, then to endAt"
+    },
+    "secondaryMetrics": [
+      { "label": "Bonus rate", "fallback": "+$2 extra per hour" },
+      { "label": "Qualifying rules", "fallback": "Work your full scheduled shift; 1-hour grace window if late; no early outs unless VTO is approved" },
+      { "label": "Eligibility", "fallback": "Open to all hourly associates, including seasonal." }
+    ],
+    "statusStates": [
+      { "label": "Starts Nov 1", "color": "#F0A81C", "condition": "now < startAt" },
+      { "label": "Live now: day X of 14", "color": "#800031", "condition": "startAt <= now < endAt; pulse dot and falling leaves" },
+      { "label": "Ended Nov 14", "color": "#8C8487", "condition": "now >= endAt; countdown replaced by thank-you message" }
+    ],
+    "timeWindows": {
+      "clock": "Device local time; each store flips at its own midnight",
+      "start": "2026-11-01T00:00:00 local",
+      "end": "2026-11-15T00:00:00 local (exclusive, i.e. end of Nov 14)"
+    },
+    "tone": "Friendly, motivational"
+  },
+  "data": {
+    "primaryParam": "externalLocationId",
+    "exampleValue": "0412",
+    "workjamVariablesUsed": ["externalLocationId", "externalLocationCode", "city"],
+    "workjamVariablesRead": ["externalLocationId", "externalLocationCode", "address", "city", "stateOrProvince", "country", "zipCode", "externalRegionId", "externalRegionCode", "employeeId", "employeeCode", "username", "language"],
+    "customVariables": [
+      { "name": "startAt", "type": "ISO timestamp (no offset = local)", "fallback": "2026-11-01T00:00:00", "display": "Countdown target before the event" },
+      { "name": "endAt", "type": "ISO timestamp (no offset = local)", "fallback": "2026-11-15T00:00:00", "display": "Countdown target during the event; drives 'day X of N'" },
+      { "name": "bonusRate", "type": "number", "fallback": "2", "display": "Formatted as +$2 or +$2.50" },
+      { "name": "previewNow", "type": "ISO timestamp", "fallback": "null (real time)", "display": "QA only: shifts the clock so any phase can be previewed; clock still ticks" }
+    ],
+    "seed": "FNV-1a hash of externalLocationId seeds the falling-leaf layout so each store renders identically on every view",
+    "dataSource": "static",
+    "refreshMs": 1000
+  },
+  "display": {
+    "defaultAspectRatio": "standard",
+    "supportedAspectRatios": ["standard", "square", "landscape", "portrait"],
+    "context": "WorkJam feed tile",
+    "layoutNotes": "16:9 uses two columns; frames under 215px tall show countdown only; 9:16 uses a 2x2 clock",
+    "motion": "Live-phase falling leaves (9-15s fall, seeded per store) and 1.5s pulse dot; both disabled under prefers-reduced-motion"
+  },
+  "version": "1.0",
+  "builtOn": "2026-10-06"
+}
